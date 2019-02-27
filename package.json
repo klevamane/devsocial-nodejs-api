@@ -15,6 +15,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.0",
     "mongoose": "^5.4.15",
     "passport": "^0.4.0",
@@ -25,6 +26,7 @@
     "@babel/core": "^7.3.4",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.3.4",
+    "morgan": "^1.9.1",
     "nodemon": "^1.18.10"
   }
 }

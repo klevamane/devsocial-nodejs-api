@@ -1,7 +1,8 @@
 import express from 'express';
+import  UserController from '../../controller/user';
 
 let router = express.Router();
 
-router.get('/test', (req, res) => res.json({ message: "checking that it works"}))
+router.post('/test', UserController.registerUser)
 
 export default router;

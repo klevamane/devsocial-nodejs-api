@@ -19,12 +19,11 @@ let userSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    avatar: {
-        type: String,
-        required: true
-    },
-})
+    // avatar: {
+    //     type: String
+    // },
+});
 
-let User = mongoose.model('user')
-// module.exports = User = mongoose.model('users ')
+let User = mongoose.model('user', userSchema)
+// module.exports = User = mongoose.model('users', userSchema);
 export default User;

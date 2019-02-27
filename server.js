@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import morgan from 'morgan';
 
 import users from './routes/api/users';
 import profile from './routes/api/profile';
@@ -10,9 +11,13 @@ import posts from './routes/api/posts';
 
 const app = express();
 
+app.use(morgan('combined'));
+
 // body-parser middleware
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+
 
 import connect from './config/keys';
 import { mongoURIconnect } from './config/keys';
