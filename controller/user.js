@@ -4,6 +4,9 @@ import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import {secretKey} from '../config/keys';
 
+import validateRegisterInput from '../validators/register';
+
+
 
 class UserController {
     
@@ -12,6 +15,11 @@ class UserController {
      * @param  {object} res
      */
     static registerUser (req, res) {
+       let { errors, isValid } = validateRegisterInput(req.body);
+       console.log('checking if the variable is valid ===> ', isValid)
+       if (!isValid)
+        return res.status(400).json(errors);
+       
         User.findOne({email: req.body.email})
             .then(user => {
                 if(user) {
