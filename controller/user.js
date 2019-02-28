@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import {secretKey} from '../config/keys';
 
 import validateRegisterInput from '../validators/register';
+import validatateLogin from '../validators/login';
 
 
 
@@ -48,13 +49,22 @@ class UserController {
     }
 
     static login (req, res) {
-        // check if user email exist
+
+        // call validation function
+        let {errors, isValid } = validatateLogin(req.body);
+        if (!isValid)
+            return res.status(400).json(errors);
+
+        // check if user email exist        
        let { email, password } = req.body;
        let loggedInuser = ''
        User.findOne({ email })
        .then(user => {
-           if (!user)
-            return res.status(404).json({ email: 'The email address does not exist '})
+           if (!user) {
+            errors.email = 'The email address does not exist'
+            return res.status(404).json(errors);
+           }
+
             loggedInuser = user;
             bcryptjs.compare(password ,user.password)
             .then(userExists => {
@@ -68,9 +78,13 @@ class UserController {
                    let signedToken =  jwt.sign({ data: payload}, secretKey, { expiresIn: '1h' })
                     return res.status(200).json({success: 'Success', token: 'Bearer ' + signedToken })
                 }
-                return res.status(400).json({ password: 'The password is wrong'})
+                errors.password = 'The password is wrong';
+                return res.status(400).json(errors);
             })
-            .catch(err => res.status(400).json({ password: 'Invalid email and password combination'}));
+            .catch(err => {
+                errors.email = 'Invalid email and password combination';
+                res.status(400).json(errors);
+            });
        });
 
     }

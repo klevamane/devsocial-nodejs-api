@@ -3,14 +3,13 @@ import isEmpty_ from './isEmpty';
 
 const validateRegisterInput = (data) => {
     let errors = {}
-    // console.log('PPPPPPP -> name ', result);
-    const result = isEmpty_(data.name);
 
     data.name = isEmpty_(data.name) === true ?  '' : data.name;
     data.email = isEmpty_(data.email) === true ?  '' : data.email;
     data.password = isEmpty_(data.password) === true ?  '' : data.password;
     data.confirmpwd = isEmpty_(data.confirmpwd) === true ?  '' : data.confirmpwd;
     
+    // Name
     if(!Validator.isLength(data.name, { min: 2, max: 30 })) {
         errors.name = 'Name must be between 2 and 30 characters';
     }
