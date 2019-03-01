@@ -75,7 +75,7 @@ class UserController {
                         email: loggedInuser.email,
                         avatar: loggedInuser.avatar
                     };
-                   let signedToken =  jwt.sign({ data: payload}, secretKey, { expiresIn: '1h' })
+                   let signedToken =  jwt.sign({ data: payload}, secretKey, { expiresIn: '24h' })
                     return res.status(200).json({success: 'Success', token: 'Bearer ' + signedToken })
                 }
                 errors.password = 'The password is wrong';

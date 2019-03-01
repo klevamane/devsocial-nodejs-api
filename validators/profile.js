@@ -36,22 +36,22 @@ const validateProfileInput = (data) => {
 
     if (!isEmpty_(data.linkedin)) {
         if(!Validator.isURL(data.linkedin))
-            errors.website = 'Not a valid URL'
+            errors.linkedin = 'Not a valid URL';
     }
 
     if (!isEmpty_(data.twitter)) {
         if(!Validator.isURL(data.twitter))
-            errors.website = 'Not a valid URL'
+            errors.twitter = 'Not a valid URL';
     }
 
     if (!isEmpty_(data.instagram)) {
         if(!Validator.isURL(data.instagram))
-            errors.website = 'Not a valid URL'
+            errors.instagram = 'Not a valid URL';
     }
 
-    if (!isEmpty_(data.linkedin)) {
-        if(!Validator.isURL(data.linkedin))
-            errors.website = 'Not a valid URL'
+    if (!isEmpty_(data.facebook)) {
+        if(!Validator.isURL(data.facebook))
+            errors.facebook = 'Not a valid URL';
     }
     
     
