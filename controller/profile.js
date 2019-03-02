@@ -222,6 +222,46 @@ class ProfileController {
             })
 
     }
+
+    static deleteExperience(req, res) {
+        Profile.findOne({ user: req.user.id})
+            .then(profile => {
+                const indexToBeRemoved = profile.experience
+                    .map(item => item.id)
+                    .indexOf(req.params.exp_id);
+
+                console.log('******** the index ', indexToBeRemoved);
+                
+                // Splice out of the array
+                if (indexToBeRemoved === -1) {
+                    return res.status(404).json({ experience: 'The experience to be deleted does not exist'});
+                }
+                profile.experience.splice(indexToBeRemoved, 1);
+
+                // Save
+                profile.save().then(profile => res.status(200).json(profile));
+            })
+            .catch(err => res.status(404).json(err));
+    }
+
+    static deleteEducation(req, res) {
+        Profile.findOne({ user: req.user.id})
+            .then(profile => {
+                const indexToBeRemoved = profile.education
+                    .map(item => item.id)  // get the id of each item and make another array
+                    .indexOf(req.params.edu_id); // in the new array get the index where req.params.edu_id === id
+                
+                    if (indexToBeRemoved === -1) {
+                        return res.status(404).json({ experience: 'The education to be deleted does not exist'});
+                    }
+                // Splice out of the array
+                profile.education.splice(indexToBeRemoved, 1);
+
+                // Save
+                profile.save().then(profile => res.status(200).json(profile));
+            })
+            .catch(err => res.status(404).json(err));
+    }
     
 }
 
