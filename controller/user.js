@@ -1,11 +1,26 @@
 import User from '../models/user';
 import gravatar from 'gravatar';
 import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import {secretKey} from '../config/keys';
+
+import validateRegisterInput from '../validators/register';
+import validatateLogin from '../validators/login';
+
 
 
 class UserController {
     
+    /**
+     * @param  {object} req
+     * @param  {object} res
+     */
     static registerUser (req, res) {
+       let { errors, isValid } = validateRegisterInput(req.body);
+       console.log('checking if the variable is valid ===> ', isValid)
+       if (!isValid)
+        return res.status(400).json(errors);
+       
         User.findOne({email: req.body.email})
             .then(user => {
                 if(user) {
@@ -32,6 +47,58 @@ class UserController {
                 });
             })
     }
+
+    static login (req, res) {
+
+        // call validation function
+        let {errors, isValid } = validatateLogin(req.body);
+        if (!isValid)
+            return res.status(400).json(errors);
+
+        // check if user email exist        
+       let { email, password } = req.body;
+       let loggedInuser = ''
+       User.findOne({ email })
+       .then(user => {
+           if (!user) {
+            errors.email = 'The email address does not exist'
+            return res.status(404).json(errors);
+           }
+
+            loggedInuser = user;
+            bcryptjs.compare(password ,user.password)
+            .then(userExists => {
+                if(userExists) {
+                    
+                    let payload = {
+                        id: loggedInuser.id,
+                        email: loggedInuser.email,
+                        avatar: loggedInuser.avatar
+                    };
+                   let signedToken =  jwt.sign({ data: payload}, secretKey, { expiresIn: '24h' })
+                    return res.status(200).json({success: 'Success', token: 'Bearer ' + signedToken })
+                }
+                errors.password = 'The password is wrong';
+                return res.status(400).json(errors);
+            })
+            .catch(err => {
+                errors.email = 'Invalid email and password combination';
+                res.status(400).json(errors);
+            });
+       });
+
+    }
+
+
+    static currentUser (req, res) {
+        // req.user is added by passport
+        let userDetailsTobeSent = {
+            id: req.user.id,
+            email: req.user.email,
+            name: req.user.name
+        }
+        res.status(200).json(userDetailsTobeSent);
+    }   
 }
 
 export default UserController;

@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
+import passport from 'passport';
 
 import users from './routes/api/users';
 import profile from './routes/api/profile';
@@ -26,6 +27,12 @@ mongoose
     .connect(mongoURIconnect)
     .then(() => console.log('MongoDb successfully connected'))
     .catch(err => console.log(`An error occoured in connecting to the database, error: ${err}`))
+
+// Passport middleware
+app.use(passport.initialize());
+require('./config/passport')(passport)
+
+
 
 app.get('/', (req, res) => res.send('Displaying the server data'));
 app.use('/api/v1/profile', profile);
