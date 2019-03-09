@@ -6,6 +6,7 @@ import {secretKey} from '../config/keys';
 
 import validateRegisterInput from '../validators/register';
 import validatateLogin from '../validators/login';
+import Profile from '../models/profile';
 
 
 
@@ -73,10 +74,11 @@ class UserController {
                     let payload = {
                         id: loggedInuser.id,
                         email: loggedInuser.email,
-                        avatar: loggedInuser.avatar
+                        avatar: loggedInuser.avatar,
+                        name: loggedInuser.name
                     };
                    let signedToken =  jwt.sign({ data: payload}, secretKey, { expiresIn: '24h' })
-                    return res.status(200).json({success: 'Success', token: 'Bearer ' + signedToken })
+                    return res.status(200).json({success: 'Success', token: signedToken })
                 }
                 errors.password = 'The password is wrong';
                 return res.status(400).json(errors);
@@ -98,7 +100,8 @@ class UserController {
             name: req.user.name
         }
         res.status(200).json(userDetailsTobeSent);
-    }   
+    }
+    
 }
 
 export default UserController;

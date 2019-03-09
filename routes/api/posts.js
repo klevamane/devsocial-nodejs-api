@@ -14,7 +14,11 @@ router.get('/post/:post_id', passport.authenticate('jwt', { session: false}), po
 
 // likes
 router.post('/:post_id/like', passport.authenticate('jwt', { session: false }), postController.likePost);
-router.post('/:post_id/unlike', passport.authenticate('jwt', { session: false }), postController.unlikePost);
+router.delete('/:post_id/unlike', passport.authenticate('jwt', { session: false }), postController.unlikePost);
+
+// comments
+router.post('/:post_id/comment', passport.authenticate('jwt', { session: false }), postController.addComment);
+router.delete('/:post_id/comment/:comment_id', passport.authenticate('jwt', { session: false }), postController.removeComment);
 
 
 export default router;

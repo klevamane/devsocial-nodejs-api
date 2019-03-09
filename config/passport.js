@@ -19,7 +19,7 @@ module.exports = passport => {
                 return done(null, user);
             } 
             // this can be customized to return any unsuccessfull error message like login required
-            // by default this returns unauthorized
+            // by default this returns unauthorized and 401 status code
             return done(null, false);
         })
         .catch(err => console.log(err));

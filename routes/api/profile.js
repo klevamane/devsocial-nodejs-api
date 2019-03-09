@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get('', passport.authenticate('jwt', { session: false }), ProfileController.get);
 router.post('', passport.authenticate('jwt', { session: false }), ProfileController.postOrUpdate);
+router.delete('', passport.authenticate('jwt', { session: false }), ProfileController.deleteProfileAndUser);
 router.get('/handle/:handle', ProfileController.getByHandle);
 router.get('/id/:id', ProfileController.getPublic);
 router.get('/all', ProfileController.getAll);

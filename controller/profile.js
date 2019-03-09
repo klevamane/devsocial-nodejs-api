@@ -104,7 +104,7 @@ class ProfileController {
      * @param  {} res
      * @access Private
      */
-    static postOrUpdate(req, res) {
+    static  postOrUpdate(req, res) {
         const profileFields = {};
         let { errors, isValid } = validateProfile(req.body);
         if (!isValid)
@@ -261,6 +261,15 @@ class ProfileController {
                 profile.save().then(profile => res.status(200).json(profile));
             })
             .catch(err => res.status(404).json(err));
+    }
+
+    static deleteProfileAndUser(req, res) {
+        Profile.findOneAndDelete({user: req.user.id})
+            .then(() => {
+                User.findOneAndDelete({ _id: req.user.id})
+                .then(() => res.status(200).json({ success: true }))
+            })
+            .catch(err => res.status(400).json({ success: false }));
     }
     
 }

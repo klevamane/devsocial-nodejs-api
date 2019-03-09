@@ -47,7 +47,7 @@ class PostController {
                         return res.status(400).json({ post: 'The post was not found' });
                     return res.status(200).json({ delete: 'true', post })
                 })
-                .catch(err => res.status(400).json({ post: 'The post could not be deleted2'}));
+                .catch(err => res.status(400).json({ post: 'The post could not be deleted'}));
             })
             .catch(err => res.status(400).json({ post: 'The post could not be deleted'}));
             // remember the _id not id
@@ -98,7 +98,7 @@ class PostController {
                 return res.status(404).json({ post: 'Post not found'});
             }
             if (post.likes.filter(like => like.user.toString() === req.user.id).length === 0)
-                return res.status(400).json({ like: 'You have not yet liked this post'})
+                return res.status(400).json({ like: 'You have not yet liked this post'});
             
             let indexOfPostToBeUnliked = post.likes
                 .map(item => item.user)
@@ -110,6 +110,62 @@ class PostController {
         })
         .catch(err => res.status(404).json(err));
     }
+
+    static addComment(req, res) {
+
+        let { errors, isValid } = validatePost(req.body);
+
+        if (!isValid)
+            return res.status(400).json(errors);
+
+        Post.findById(req.params.post_id)
+            .then(post => {
+
+                const newComment = {
+                    name: req.body.name,
+                    text: req.body.text,
+                    user: req.user.id,
+                    avatar: req.body.avatar
+                }
+                // Add the comment to the comments array in the post Model
+                post.comments.unshift(newComment);
+                post.save().then(post => res.status(200).json(post));
+            })
+            .catch(err => res.status(404).json({ post: 'The post was not found'}));
+            
+    }  
+
+    static removeComment(req, res) {
+        Post.findById(req.params.post_id)
+            .then(post => {
+                if(!post) {
+                    return res.status(404).json({ post: 'Post not found'});
+                }
+                console.log('FFFFESRTT');
+                const newComment = {
+                    name: req.body.name,
+                    text: req.body.text,
+                    user: req.user.id,
+                    avatar: req.body.avatar
+                }
+                // Add the comment to the comments array in the post Model
+                let indexOfCommentToBeRemoved = post.comments
+                    .map(item => item.id)
+                    .indexOf(req.params.comment_id);
+                
+                if (indexOfCommentToBeRemoved === -1) {
+                    return res.status(404).json({ comment: 'The Comment to be deleted does not exist'});
+                }
+
+                if (post.comments[indexOfCommentToBeRemoved].user.toString() !== req.user.id)
+                    return res.status(400).json({ like: 'You cannot delete a comment created by another user'});
+                
+                
+                post.comments.splice(indexOfCommentToBeRemoved, 1);
+                post.save().then(post => res.status(200).json(post));
+            })
+            .catch(err => res.status(404).json({ post: 'The post was not foundzz'}));
+    }  
 
 
 }
