@@ -16,7 +16,7 @@ const validatateEducation = (data) => {
         errors.school = 'School field is required';
     
     if (Validator.isEmpty(data.degree)) 
-        errors.degree = 'School field is required';
+        errors.degree = 'Degree field is required';
     
     if (Validator.isEmpty(data.from)) 
         errors.from = 'From date field is required';

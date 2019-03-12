@@ -87,12 +87,13 @@ class ProfileController {
         let errors = {};
         errors.handle = `There is no profile with the handle ${req.params.handle}`;
         Profile.findOne({ handle: req.params.handle })
-        .populate('user', ['name', 'avatar'])
+        .populate('user', ['firstname','lastname', 'avatar'])
         .then(profile => {
             if(!profile) {
                 
                 return res.status(404).json(errors);
             }
+            
             return res.status(200).json(profile);
         })
         .catch(err => res.status(404).json(errors));
@@ -115,7 +116,7 @@ class ProfileController {
 
         if(req.body.handle) profileFields.handle = req.body.handle;
         if(req.body.company) profileFields.company  = req.body.company;
-        if(req.body.website) profileFields.hwebsite = req.body.website;
+        if(req.body.website) profileFields.website = req.body.website;
         if(req.body.status) profileFields.status = req.body.status;
         if(req.body.bio) profileFields.bio = req.body.bio;
         if(req.body.location) profileFields.location = req.body.location;
@@ -127,7 +128,7 @@ class ProfileController {
             profileFields.skills = req.body.skills.split(',');
         }
 
-        // Soical
+        // Social
         // Note that social is an object of fields
         // therefore we need to initalize profileFields.social as an empty object
 
@@ -175,6 +176,7 @@ class ProfileController {
         let { errors, isValid } = validateXperience(req.body);
         if (!isValid)
             return res.status(400).json(errors);
+        
 
         Profile.findOne({ user: req.user.id })
             .then(profile => {

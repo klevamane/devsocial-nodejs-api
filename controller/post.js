@@ -17,10 +17,11 @@ class PostController {
         if (!isValid)
             return res.status(400).json(errors);
         // validate post here
-
+        
         const newPost = new Post ({
             text: req.body.text,
-            name: req.body.name,
+            firstname: req.user.firstname,
+            lastname: req.user.lastname,
             avatar: req.body.avatar,
             user: req.user.id
         });
@@ -67,6 +68,7 @@ class PostController {
     static get(req, res) {
         
         Post.findOne({ _id: req.params.post_id})
+        .populate('user', ['firstname', 'lastname', 'avatar'])
             .then(post => {
                 if(!post) {
                     return res.status(404).json({ post: 'Post not found'});

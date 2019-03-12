@@ -17,6 +17,9 @@ const validatateXperience = (data) => {
     if (Validator.isEmpty(data.company)) 
         errors.company = 'Company field is required';
     
+    if (Validator.toDate(data.from) === null)
+        errors.from = 'Not a valid date';
+
     if (Validator.isEmpty(data.from)) 
         errors.from = 'From date field is required';
     

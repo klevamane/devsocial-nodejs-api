@@ -29,9 +29,22 @@ const validateProfileInput = (data) => {
     
     // Optional fields
 
+    
+    if (!isEmpty_(data.website)) {
+        if (!Validator.matches(data.website.substr(0, 7), 'http://') && !Validator.matches(data.website.substr(0, 8), 'https://')) {
+            errors.website = 'Website URl must begin with http:// or https://';
+        }
+    }
+
     if(!isEmpty_(data.website)) {
         if(!Validator.isURL(data.website))
             errors.website = 'Not a valid URL';
+    }
+
+    if (!isEmpty_(data.linkedin)) {
+        if (!Validator.matches(data.linkedin.substr(0, 7), 'http://') && !Validator.matches(data.linkedin.substr(0, 8), 'https://')) {
+            errors.linkedin = 'Website URl must begin with http:// or https://';
+        }
     }
 
     if (!isEmpty_(data.linkedin)) {
@@ -40,13 +53,31 @@ const validateProfileInput = (data) => {
     }
 
     if (!isEmpty_(data.twitter)) {
+        if (!Validator.matches(data.twitter.substr(0, 7), 'http://') && !Validator.matches(data.twitter.substr(0, 8), 'https://')) {
+            errors.twitter = 'Website URl must begin with http:// or https://';
+        }
+    }
+
+    if (!isEmpty_(data.twitter)) {
         if(!Validator.isURL(data.twitter))
             errors.twitter = 'Not a valid URL';
     }
 
+
+    if (!isEmpty_(data.instagram)) {
+        if (!Validator.matches(data.instagram.substr(0, 7), 'http://') && !Validator.matches(data.instagram.substr(0, 8), 'https://')) {
+            errors.instagram = 'Website URl must begin with http:// or https://';
+        }
+    }
     if (!isEmpty_(data.instagram)) {
         if(!Validator.isURL(data.instagram))
             errors.instagram = 'Not a valid URL';
+    }
+
+    if (!isEmpty_(data.facebook)) {
+        if (!Validator.matches(data.facebook.substr(0, 7), 'http://') && !Validator.matches(data.facebook.substr(0, 8), 'https://')) {
+            errors.facebook = 'Website URl must begin with http:// or https://';
+        }
     }
 
     if (!isEmpty_(data.facebook)) {

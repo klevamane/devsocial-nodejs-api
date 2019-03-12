@@ -4,21 +4,35 @@ import isEmpty_ from './isEmpty';
 const validateRegisterInput = (data) => {
     let errors = {}
 
-    data.name = isEmpty_(data.name) === true ?  '' : data.name;
+    data.firstname = isEmpty_(data.firstname) === true ?  '' : data.firstname;
+    data.lastname = isEmpty_(data.lastname) === true ?  '' : data.lastname;
     data.email = isEmpty_(data.email) === true ?  '' : data.email;
     data.password = isEmpty_(data.password) === true ?  '' : data.password;
     data.confirmpwd = isEmpty_(data.confirmpwd) === true ?  '' : data.confirmpwd;
     
-    // Name
-    if(!Validator.isLength(data.name, { min: 2, max: 30 })) {
-        errors.name = 'Name must be between 2 and 30 characters';
+    // Firstname
+    if(!Validator.isLength(data.firstname, { min: 2, max: 30 })) {
+        errors.firstname = 'Firstname must be between 2 and 30 characters';
     }
 
-    if(!Validator.isAlpha(data.name))
-        errors.name = 'Name field must only contain alphabets';
+    if(!Validator.isAlpha(data.firstname))
+        errors.firstname = 'Firstname field must only contain alphabets';
 
-    if (Validator.isEmpty(data.name)) {
-        errors.name = 'Name field is required';
+    if (Validator.isEmpty(data.firstname)) {
+        errors.firstname = 'Firstname field is required';
+    }
+
+
+    // Lastname
+    if(!Validator.isLength(data.lastname, { min: 2, max: 30 })) {
+        errors.lastname = 'Lastname must be between 2 and 30 characters';
+    }
+
+    if(!Validator.isAlpha(data.lastname))
+        errors.lastname = 'Lastname field must only contain alphabets';
+
+    if (Validator.isEmpty(data.lastname)) {
+        errors.lastname = 'Lastname field is required';
     }
 
     // Email

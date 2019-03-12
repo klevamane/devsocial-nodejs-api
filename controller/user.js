@@ -32,7 +32,8 @@ class UserController {
             
                 // bcrypt
                 let newUser = new User({
-                    name: req.body.name,
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname,
                     email: req.body.email,
                     password: req.body.password,
                     avatar,
@@ -75,7 +76,8 @@ class UserController {
                         id: loggedInuser.id,
                         email: loggedInuser.email,
                         avatar: loggedInuser.avatar,
-                        name: loggedInuser.name
+                        firstname: loggedInuser.firstname,
+                        lastname: loggedInuser.lastname
                     };
                    let signedToken =  jwt.sign({ data: payload}, secretKey, { expiresIn: '24h' })
                     return res.status(200).json({success: 'Success', token: signedToken })
@@ -97,7 +99,8 @@ class UserController {
         let userDetailsTobeSent = {
             id: req.user.id,
             email: req.user.email,
-            name: req.user.name
+            firstname: req.user.firstname,
+            lastname: req.user.lastname
         }
         res.status(200).json(userDetailsTobeSent);
     }
