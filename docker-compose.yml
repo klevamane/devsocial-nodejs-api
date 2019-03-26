@@ -1,0 +1,25 @@
+version: '3'
+services:
+  app:
+    # This is an arbitrary name
+    container_name: docker-node-mongo 
+    restart: always
+    # we want to build from our docker file, so it looks in the current directory for a Dockerfile
+    build: .
+    # Map 80 on the local machine to 5000 in the container
+    ports:
+      # note that when we go to a new line, we add hyphen
+      - '80:5000'
+    # link our app service to our mongo service  
+    links:
+      - mongo
+    command: npm run dev
+  # ensure that all services are on the same line eg app, mongo, etc  
+  mongo:
+    # Arbitraty name
+    container_name: mongo
+    # name on hub.docker.com
+    image: mongo
+    # mongo db runs on 27017, we are just mapping it to an arbitrary port, in this case; the same
+    ports:
+      - '27017:27017'
