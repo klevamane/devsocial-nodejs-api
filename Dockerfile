@@ -15,7 +15,7 @@ RUN npm install
 COPY . . 
 
 # expose port 3000 because that is the port our application runs on
-EXPOSE 3000
+EXPOSE 5000
 
 # the npm start script - to run the app as implemented in the application itself
 # CMD ["npm", "start"]
