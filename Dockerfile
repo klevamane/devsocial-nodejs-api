@@ -1,4 +1,6 @@
-# extends node 10, make the version static as opposed to latest due to potential breaking changes
+# extends node 10, as the image its going to be based of
+# it uses the resided node 10 image else it downloads it
+# make the version static as opposed to latest due to potential breaking changes 
 FROM node:10
 
 # This is where the application will live in the container
@@ -16,6 +18,7 @@ RUN npm install
 COPY . . 
 
 # expose port 5000 because that is the port our application runs on
+# but note our prefered standard port should be 80 when deploying to prod env
 EXPOSE 5000
 
 # the npm start script - to run the app as implemented in the application itself

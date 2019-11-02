@@ -32,10 +32,10 @@ class UserController {
             
                 // bcrypt
                 let newUser = new User({
-                    firstname: req.body.firstname,
-                    lastname: req.body.lastname,
-                    email: req.body.email,
-                    password: req.body.password,
+                    firstname: req.body.firstname.toLowerCase(),
+                    lastname: req.body.lastname.toLowerCase(),
+                    email: req.body.email.toLowerCase(),
+                    password: req.body.password.toLowerCase(),
                     avatar,
                 })
                 bcryptjs.genSalt(10, (err, salt) => {
