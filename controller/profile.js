@@ -11,6 +11,7 @@ import validateProfile from '../validators/profile';
 import validateXperience from '../validators/experience';
 import validateEducation from '../validators/education';
 
+import { getExperience, getEducation } from '../utils'
 class ProfileController {
 
     
@@ -49,7 +50,6 @@ class ProfileController {
             .populate('user', ['name', 'avatar']) // because the profile model references the user model, we can populate desired fields
             .then(profile => {
                 if(!profile) {
-                    
                     return res.status(404).json(errors)
                 }
                 return res.status(200).json(profile);
@@ -90,10 +90,8 @@ class ProfileController {
         .populate('user', ['firstname','lastname', 'avatar'])
         .then(profile => {
             if(!profile) {
-                
                 return res.status(404).json(errors);
             }
-            
             return res.status(200).json(profile);
         })
         .catch(err => res.status(404).json(errors));
@@ -159,12 +157,8 @@ class ProfileController {
                             // save profile
                             new Profile(profileFields).save()
                                 .then(profile => res.status(200).json(profile))
-                            
                         });
-
                 }
-                
-
             })
         
         
@@ -180,17 +174,14 @@ class ProfileController {
 
         Profile.findOne({ user: req.user.id })
             .then(profile => {
-                const newXperience = {
-                    title: req.body.title,
-                    location: req.body.location,
-                    company: req.body.company,
-                    description: req.body.description,
-                    from: req.body.from,
-                    to: req.body.to,
-                    current: req.body.current,  
-                } 
-                // this will add the experience to the to of the array as opposed to
+                const newXperience = getExperience(req) 
+                // this will add the experience to the top of the array as opposed to
                 // pushing at the end
+               
+                if (!profile)
+                    return res.json({
+                        message: 'The user need to have a profile to add an experience'
+                    });
                 profile.experience.unshift(newXperience);
                 profile.save()
                     .then(profile => res.json(profile));
@@ -207,17 +198,13 @@ class ProfileController {
 
         Profile.findOne({ user: req.user.id })
             .then(profile => {
-                const newEducation = {
-                    school: req.body.school,
-                    degree: req.body.degree,
-                    fieldofstudy: req.body.fieldofstudy,
-                    description: req.body.description,
-                    from: fromDate,
-                    to: req.body.to,
-                    current: req.body.current,  
-                } 
+                const newEducation = getEducation(req, fromDate) 
                 // this will add the experience to the to of the array as opposed to
                 // pushing at the end
+                if (!profile)
+                    return res.json({
+                        message: 'The user need to have a profile to add an education'
+                    });
                 profile.education.unshift(newEducation);
                 profile.save()
                     .then(profile => res.json(profile));
@@ -231,8 +218,6 @@ class ProfileController {
                 const indexToBeRemoved = profile.experience
                     .map(item => item.id)
                     .indexOf(req.params.exp_id);
-
-                console.log('******** the index ', indexToBeRemoved);
                 
                 // Splice out of the array
                 if (indexToBeRemoved === -1) {

@@ -9,11 +9,15 @@ services:
     # Map 80 on the local machine to 5000 in the container
     ports:
       # note that when we go to a new line, we add hyphen
-      - '80:5000'
+      - '5000:5000'
     # link our app service to our mongo service  
     links:
       - mongo
     command: npm run dev
+    # set volumes path to enable persitent changes made in the code
+    # https://testdriven.io/blog/dockerizing-flask-with-postgres-gunicorn-and-nginx/
+    volumes:
+      - ./:/usr/src/app
   # ensure that all services are on the same line eg app, mongo, etc  
   mongo:
     # Arbitraty name
