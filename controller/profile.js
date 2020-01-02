@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 // models
 import Profile from "../models/profile";
 import User from "../models/user";
+import Post from "../models/post";
 
 // validators
 import validateProfile from "../validators/profile";
@@ -94,21 +95,18 @@ class ProfileController {
   }
 
   /**
-   * @description Create the current user profile
+   * @description Create or update the current user profile
    * @param  {} req
    * @param  {} res
    * @access Private
    */
   static postOrUpdate(req, res) {
     const profileFields = {};
-    console.log("****** request body", req.body);
     let { errors, isValid } = validateProfile(req.body);
     if (!isValid) return res.status(400).json(errors);
 
     // req.user is gotten from the token via passport
-    console.log("************ reacheeeeee 1");
     profileFields.user = req.user.id;
-    console.log("************ reacheeeeee 2");
 
     if (req.body.handle) profileFields.handle = req.body.handle;
     if (req.body.company) profileFields.company = req.body.company;
@@ -116,15 +114,20 @@ class ProfileController {
     if (req.body.status) profileFields.status = req.body.status;
     if (req.body.bio) profileFields.bio = req.body.bio;
     if (req.body.location) profileFields.location = req.body.location;
-    if (req.body.githubusername)
-      profileFields.githubusername = req.body.githubusername;
-
+    if (req.body.githubusername) profileFields.githubusername = req.body.githubusername;
     // Skills - The skills which is a comma seperated value from input
     // is split into an array
-    // if (typeof req.body.skill !== "undefine") {
+    // console.log('****** req skills', req.body.skills)
+    // if (typeof req.body.skills !== "undefine" || req.body.skills !== "") {
     //   profileFields.skills = req.body.skills.split(",");
     // }
-
+    if (typeof req.body.skills !== 'object') {
+    profileFields.skills = req.body.skills.split(",")
+    }
+    else {
+        profileFields.skills = req.body.skills
+    }
+    // profileFields.skills = req.body.skills
     // Social
     // Note that social is an object of fields
     // therefore we need to initalize profileFields.social as an empty object
@@ -164,6 +167,7 @@ class ProfileController {
   // Experience
 
   static addExperience(req, res) {
+    
     let { errors, isValid } = validateXperience(req.body);
     if (!isValid) return res.status(400).json(errors);
 
@@ -182,6 +186,7 @@ class ProfileController {
   }
 
   static addEducation(req, res) {
+    
     let { errors, isValid } = validateEducation(req.body);
     if (!isValid) return res.status(400).json(errors);
 
@@ -245,6 +250,8 @@ class ProfileController {
   static deleteProfileAndUser(req, res) {
     Profile.findOneAndDelete({ user: req.user.id })
       .then(() => {
+        //   you can also choose to delete the user's post
+        Post.deleteMany({ user: req.user.id })
         User.findOneAndDelete({ _id: req.user.id }).then(() =>
           res.status(200).json({ success: true })
         );
