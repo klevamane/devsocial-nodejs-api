@@ -12,9 +12,15 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install the dependencies
+# the RUN command enables us to run linux commands
+# this is executed on the container
 RUN npm install
 
 # copy everything else in this project to the container
+# note that the copy command is executed on the host
+# note that copy can be executed via linux but this is executed on the host device
+# copy files on the host to inside the container image
+# note that for instand `RUN cp <source> <destination> will be run instide the docker container`
 COPY . . 
 
 # expose port 5000 because that is the port our application runs on
@@ -22,4 +28,8 @@ COPY . .
 EXPOSE 5000
 
 # the npm start script - to run the app as implemented in the application itself
+# this actually executes an entry point linux command
+# this is always/usually present in a dockerfile
+# CMD is an entry point command, that marks to docker that this is the command to be run for entry
+# it is different from `RUN npm start`
 # CMD ["npm", "start"]
